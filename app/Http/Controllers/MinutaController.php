@@ -21,11 +21,13 @@ class MinutaController extends Controller
     
     public function downloadPdf(Minuta $id)
     {
-        $minutas = Minuta::find($id);
+        $minutas = Minuta::all();
+        $minuta = $minutas->find($id);
+        //$minutas = Minuta::find($id);
 
         view()->share('minutas.pdf',$minutas);
 
-        $pdf = PDF::loadView('minutas.pdf', compact('minutas'))->setPaper('a4');
+        $pdf = PDF::loadView('minutas.pdf', compact('minuta'))->setPaper('a4');
 
         return $pdf->download('Minuta.pdf');
     }
@@ -33,7 +35,6 @@ class MinutaController extends Controller
     public function store(Request $request)
     {
         $minutas = new Minuta();
-        $minutas->id = $request->get('id');
         $minutas->fecha = $request->get('fecha');
         $minutas->lugar = $request->get('lugar');
         $minutas->de = $request->get('de');
