@@ -33,7 +33,7 @@ class MinutaController extends Controller
     public function store(Request $request)
     {
         $minutas = new Minuta();
-        $minutas->id = $request->get('id');
+        //$minutas->id = $request->get('id');
         $minutas->fecha = $request->get('fecha');
         $minutas->lugar = $request->get('lugar');
         $minutas->de = $request->get('de');
