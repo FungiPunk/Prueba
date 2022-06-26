@@ -16,7 +16,7 @@
 </head>
 <body>
   <header>Red Temática de Investigación Por Colaboración <br>__________________________ <br>Desarrollo Organizacional y Empresarial <br></header>
-  <footer><img width="100%" src={{URL::asset('Logo/ITCJ.jpg')}}/> </footer>
+  <footer><img width="100%" src={{URL::asset('Logo/logos.png')}}/> </footer>
   <main>
     
                     <br>                      
