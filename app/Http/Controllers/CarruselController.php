@@ -30,7 +30,7 @@ class CarruselController extends Controller
 
             $imagen = $request->file('urlfoto');
             $nuevonombre = time()."_".$imagen->guessExtension();
-            Image::make($image)
+            Image::make($imagen)
             ->fit(1200,450,function($constraint){$constraint->upsize();})
             ->save( 'public/CarruselFotos/'.$nuevonombre);
 
