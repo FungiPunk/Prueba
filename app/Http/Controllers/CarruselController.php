@@ -32,7 +32,7 @@ class CarruselController extends Controller
             $nuevonombre = time()."_".$imagen->guessExtension();
             Image::make($imagen->getRealPath())
             ->fit(1200,450,function($constraint){ $constraint->upsize();  })
-            ->save( public_path('public/CarruselFotos/'.$nuevonombre));
+            ->save( 'public/CarruselFotos/'.$nuevonombre);
 
             $carrusel->urlfoto = $nuevonombre;
         }
@@ -54,7 +54,7 @@ class CarruselController extends Controller
 
         if($request->hasFile('urlfoto')){
 
-            $rutaAnterior = public_path('/public/CarruselFotos/'.$foto_anterior);
+            $rutaAnterior = '/public/CarruselFotos/'.$foto_anterior;
             if(file_exists($rutaAnterior)){ unlink(realpath($rutaAnterior)); }
 
             $imagen = $request->file('urlfoto');
@@ -62,7 +62,7 @@ class CarruselController extends Controller
             $nuevonombre = time()."_".$imagen->guessExtension();
             Image::make($imagen->getRealPath())
             ->fit(1200,450,function($constraint){ $constraint->upsize();  })
-            ->save( public_path('public/CarruselFotos/'.$nuevonombre));
+            ->save( 'public/CarruselFotos/'.$nuevonombre);
 
             $carrusel->urlfoto = $nuevonombre;
         }
