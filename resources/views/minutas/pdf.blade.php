@@ -1,4 +1,3 @@
-<html>
 <head>
   <style>
     <link rel="stylesheet" href="<?php echo asset('pdf.css')?>" type="text/css">
@@ -16,9 +15,9 @@
 </head>
 <body>
   <header>Red Temática de Investigación Por Colaboración <br>__________________________ <br>Desarrollo Organizacional y Empresarial <br></header>
-  <footer><img width="100%" src={{URL::asset('Logo/logos.png')}}/> </footer>
+  <footer><img width="100%" src="./logo/logos.png"/> </footer>
   <main>
-    
+      @forelse($minutas as $minuta)
                     <br>                      
                     <h6>{{$minuta->lugar}},{{$minuta->fecha}}<br></h6>
                     <h5><b>De: </b>{{$minuta->de}}<br></h5>
@@ -31,7 +30,8 @@
                     <h5><b>Acciones: </b>{{$minuta->acciones}}<br></h5>
                     <h4>_____________<br></h4>
                     <h4>{{$minuta->firma}}<br></h4>
-           
+                @empty  
+                @endforelse 
 
   </main>
 </body>
