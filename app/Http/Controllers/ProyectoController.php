@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-require 'vendor/autoload.php';
+require '/var/www/proyecto/Prueba/vendor/autoload.php';
 
 use Illuminate\Http\Request;
 use App\Models\Proyecto;
