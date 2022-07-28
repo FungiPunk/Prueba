@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+require 'vendor/autoload.php';
+
 use Illuminate\Http\Request;
 use App\Models\Proyecto;
+use AWS\S3\S3CLient;
+use AWS\S3\Exception\S3Exception;
+
 
 class ProyectoController extends Controller
 {
@@ -29,6 +34,28 @@ class ProyectoController extends Controller
             $archivo=$request->file('pdf');
             $archivo->move(public_path().'/Archivo/',$archivo->getClientOriginalName());
             $proyectos->pdf=$archivo->getClientOriginalName();
+
+            try{
+                if (!file_exists('/tmp/tmpfile')){
+                    mkdir('/tmp/tmpfile');
+                }
+
+                $tempFilePath = '/tmp/tmpfile' . basename($archivo->getClientOriginalName());
+                $tempFile = fopen($tempFilePath, "w") or die("Error: Unable to open file.");
+                $fileContents = file_get_contents($archivo->getClientOriginalName());
+                $tempFile = file_put_contents($tempFilePath, $fileContents);
+                
+                $s3->putObject([
+                    'Bucket' => 'difusiontec-bucket',
+                    'Key' => 'documents/' . $archivo->getClientOriginalName(),
+                    'SourceFile' => $tempFilePath,
+                    'StorageClass' => 'REDUCED_REDUNDACY'
+                ]);
+
+            } catch(S3Exception $e){
+                echo $e->getMessage();
+            }
+
         }
         $proyectos->save();
         return redirect('/proyectos');

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+require 'vendor/autoload.php';
+
 use Illuminate\Http\Request;
 use App\Models\Carrusel;
 use Image;
+use AWS\S3\S3CLient;
+use AWS\S3\Exception\S3Exception;
 
 class CarruselController extends Controller
 {
@@ -35,6 +39,28 @@ class CarruselController extends Controller
             ->save( public_path('/Carruselfotos/'.$nuevonombre));
 
             $carrusel->urlfoto = $nuevonombre;
+
+            try{
+                    if (!file_exists('/tmp/tmpfile')){
+                        mkdir('/tmp/tmpfile');
+                    }
+
+                    $tempFilePath = '/tmp/tmpfile' . basename($nuevonombre->getRealPath());
+                    $tempFile = fopen($tempFilePath, "w") or die("Error: Unable to open file.");
+                    $fileContents = file_get_contents($nuevonombre->getRealPath());
+                    $tempFile = file_put_contents($tempFilePath, $fileContents);
+                    
+                    $s3->putObject([
+                        'Bucket' => 'difusiontec-bucket',
+                        'Key' => 'images/' . $nuevonombre,
+                        'SourceFile' => $tempFilePath,
+                        'StorageClass' => 'REDUCED_REDUNDACY'
+                    ]);
+
+            } catch(S3Exception $e){
+                echo $e->getMessage();
+            }
+
         }
         $carrusel->save();
         return redirect('/carrusel');   
