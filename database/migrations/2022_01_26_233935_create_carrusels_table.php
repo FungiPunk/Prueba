@@ -17,7 +17,7 @@ class CreateCarruselsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('descripcion',200);
-            $table->string('urlfoto',100);
+            $table->string('urlfoto',200)->change();
             $table->string('link',300)->nullable();
             $table->integer('orden')->default(0);
         });

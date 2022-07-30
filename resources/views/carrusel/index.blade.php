@@ -29,7 +29,7 @@
                                     <tr>
                                             <td>{{$carrusel->orden}}</td>
                                             <td>{{$carrusel->descripcion}}</td>
-                                            <td><img src="CarruselFotos/{{$carrusel->urlfoto}}" width="400"></td>     
+                                            <td><img src="{{$carrusel->urlfoto}}" width="400"></td>     
                                             <td>
                                                 <a href="/carrusel/{{$carrusel->id}}/edit" class="btn btn-info">Editar</a>  
                                             </td> 

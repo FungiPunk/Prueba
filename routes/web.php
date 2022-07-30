@@ -19,3 +19,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('download-pdf/{id}', [App\Http\Controllers\MinutaController::class, 'downloadPdf'])->name('download-pdf');
 });
 
+Route::group(['namespace' => 'App\Http\Controllers'], function()
+{   
+    Route::get('/image-upload', 'ImageUploadController@index')->name('image-upload.index');
+    Route::post('/image-upload', 'ImageUploadController@upload')->name('image-upload.post');
+});
