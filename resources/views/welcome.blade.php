@@ -14,7 +14,7 @@
         <div class="carousel-inner">
         @forelse ($carrusel as $item)
           <div class="carousel-item @if($loop->index==0) active @endif">
-            <img src="/CarruselFotos/{{$item->urlfoto}}" class="d-block w-100" alt="{{$item->descripcion}}">
+            <img src="{{$item->urlfoto}}" class="d-block w-100" alt="{{$item->descripcion}}" width="400" height="500">
             <div class="carousel-caption d-none d-md-block pb-5">
                 <h3 class="w-100 text-white font-weight-bold">{{$item->descripcion}}</h3>
                 <a target="blank_" href="{{$item->link}}" class="btn btn-success my-2 my-sm-0g">IR</a>

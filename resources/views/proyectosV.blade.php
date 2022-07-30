@@ -29,7 +29,7 @@
                                                 <td>{{$proyecto->autor}}</td>
                                                 <td>{{$proyecto->departamento}}</td>
                                                 <td>{{$proyecto->pdf}}</td> 
-                                                <td><a class="btn btn-dark" href="Archivo/{{$proyecto->pdf}}" target="blank_">Ver Documento</a></td>   
+                                                <td><a class="btn btn-dark" href="{{$proyecto->pdf}}" target="blank_">Ver Documento</a></td>   
                                         </tr>
                                         @endforeach
                                     </tbody>
