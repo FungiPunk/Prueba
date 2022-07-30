@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-require '/var/www/proyecto/Prueba/vendor/autoload.php';
-
 use Illuminate\Http\Request;
 use App\Models\Proyecto;
-use AWS\S3\S3CLient;
-use AWS\S3\Exception\S3Exception;
-
+Use Storage;
 
 class ProyectoController extends Controller
 {
@@ -25,37 +21,19 @@ class ProyectoController extends Controller
 
     public function store(Request $request)
     {
-        $proyectos = new Proyecto();
-        $proyectos->titulo = $request->get('titulo');
-        $proyectos->fecha = $request->get('fecha');
-        $proyectos->autor = $request->get('autor');
-        $proyectos->departamento = $request->get('departamento');
+        $proyectos = new Proyecto($request->all());
+        //$proyectos->titulo = $request->get('titulo');
+        //$proyectos->fecha = $request->get('fecha');
+        //$proyectos->autor = $request->get('autor');
+        //$proyectos->departamento = $request->get('departamento');
         if($request->hasFile('pdf')){
-            $archivo=$request->file('pdf');
-            $archivo->move(public_path().'/Archivo/',$archivo->getClientOriginalName());
-            $proyectos->pdf=$archivo->getClientOriginalName();
+            //$archivo=$request->file('pdf');
+            //$archivo->move(public_path().'/Archivo/',$archivo->getClientOriginalName());
+            //$proyectos->pdf=$archivo->getClientOriginalName();
 
-            try{
-                if (!file_exists('/tmp/tmpfile')){
-                    mkdir('/tmp/tmpfile');
-                }
-
-                $tempFilePath = '/tmp/tmpfile' . basename($archivo->getClientOriginalName());
-                $tempFile = fopen($tempFilePath, "w") or die("Error: Unable to open file.");
-                $fileContents = file_get_contents($archivo->getClientOriginalName());
-                $tempFile = file_put_contents($tempFilePath, $fileContents);
-                
-                $s3->putObject([
-                    'Bucket' => 'difusiontec-bucket',
-                    'Key' => 'documents/' . $archivo->getClientOriginalName(),
-                    'SourceFile' => $tempFilePath,
-                    'StorageClass' => 'REDUCED_REDUNDACY'
-                ]);
-
-            } catch(S3Exception $e){
-                echo $e->getMessage();
-            }
-
+           $path = $request->file('pdf')->store('documents', 's3');
+	   $url = Storage::disk('s3')->url($path);
+	   $proyectos->pdf = $url;
         }
         $proyectos->save();
         return redirect('/proyectos');

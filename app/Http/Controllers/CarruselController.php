@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-require '/var/www/proyecto/Prueba/vendor/autoload.php';
-
 use Illuminate\Http\Request;
 use App\Models\Carrusel;
 use Image;
-use AWS\S3\S3CLient;
-use AWS\S3\Exception\S3Exception;
+Use Storage;
 
 class CarruselController extends Controller
 {
@@ -31,37 +28,24 @@ class CarruselController extends Controller
         $carrusel = new Carrusel($request->all());
         
         if($request->hasFile('urlfoto')){
-
+	    /*
             $imagen = $request->file('urlfoto');
             $nuevonombre = time()."_".$imagen->guessExtension();
             Image::make($imagen->getRealPath())
-            ->fit(1200,450,function($constraint){ $constraint->upsize();  })
-            ->save('/Carruselfotos/'.$nuevonombre);
+            ->fit(1200,450,function($constraint){ $constraint->upsize();  });
+	    $filePath = 'images/' . $nuevonombre;
 
-            $carrusel->urlfoto = $nuevonombre;
+	    Storage::disk('s3')->put($filePath, file_get_contents($imagen));
+	    $carrusel->urlfoto = Storage::disk('s3')->url($filepath);
+	    */
 
-            try{
-                    if (!file_exists('/tmp/tmpfile')){
-                        mkdir('/tmp/tmpfile');
-                    }
+	   $path = $request->file('urlfoto')->store('images', 's3');
+	   $url = Storage::disk('s3')->url($path);
+	   $carrusel->urlfoto = $url;
 
-                    $tempFilePath = '/tmp/tmpfile' . basename($nuevonombre->getRealPath());
-                    $tempFile = fopen($tempFilePath, "w") or die("Error: Unable to open file.");
-                    $fileContents = file_get_contents($nuevonombre->getRealPath());
-                    $tempFile = file_put_contents($tempFilePath, $fileContents);
-                    
-                    $s3->putObject([
-                        'Bucket' => 'difusiontec-bucket',
-                        'Key' => 'images/' . $nuevonombre,
-                        'SourceFile' => $tempFilePath,
-                        'StorageClass' => 'REDUCED_REDUNDACY'
-                    ]);
-
-            } catch(S3Exception $e){
-                echo $e->getMessage();
-            }
-
-        }
+           //$image = Image::create(['filename' => basename($path), 'url' => Storage::disk('s3')->url($path)]);
+	}
+           //$carrusel->urlfoto = $nuevonombre;
         $carrusel->save();
         return redirect('/carrusel');   
     }
@@ -79,7 +63,7 @@ class CarruselController extends Controller
         $foto_anterior=$carrusel->urlfoto;
 
         if($request->hasFile('urlfoto')){
-
+	    /*
             $rutaAnterior = public_path('/Carruselfotos/'.$foto_anterior);
             if(file_exists($rutaAnterior)){ unlink(realpath($rutaAnterior)); }
 
@@ -89,8 +73,9 @@ class CarruselController extends Controller
             Image::make($imagen->getRealPath())
             ->fit(1200,450,function($constraint){ $constraint->upsize();  })
             ->save( public_path('/Carruselfotos/'.$nuevonombre));
-
-            $carrusel->urlfoto = $nuevonombre;
+	    $carrusel->urlfoto = Storage::disk('s3')->url($imagen);
+	    */
+	    return Storage::disk('s3')->response('images/' . 'nUTFR6PS6MRicANhqmISrilJZLM04lENsIcyAa85.png');
         }
        
         $carrusel->save();
